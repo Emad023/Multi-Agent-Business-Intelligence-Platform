@@ -1,13 +1,29 @@
 import pandas as pd
 from database.connection import engine
 
-query = """
-SELECT
-    ROUND(SUM(sales)::numeric,2) AS total_revenue,
-    ROUND(SUM(profit)::numeric,2) AS total_profit
-FROM sales_fact
-"""
+files = [
+    "revenue_analysis.sql",
+    "customer_analysis.sql",
+    "product_analysis.sql",
+    "profitability_analysis.sql"
+]
 
-df = pd.read_sql(query, engine)
+for file in files:
 
-print(df)
+    print(f"\n{'='*50}")
+    print(file)
+    print(f"{'='*50}")
+
+    with open(
+        f"analytics/{file}",
+        "r"
+    ) as f:
+
+        query = f.read()
+
+    df = pd.read_sql(
+        query,
+        engine
+    )
+
+    print(df.head())
