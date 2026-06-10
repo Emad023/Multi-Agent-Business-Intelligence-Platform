@@ -1,32 +1,28 @@
-from services.customer_service import (
-    get_customer_segments
-)
+from services.customer_service import get_customer_segments
+from vector_db.rag_pipeline import retrieve_context
 
-from vector_db.rag_pipeline import (
-    retrieve_context
-)
 
 def customer_agent(question):
 
-    customer_data = get_customer_segments()
+    df = get_customer_segments()
+
+    top_segment = df.iloc[0]
 
     context = retrieve_context(question)
 
-    return {
-        "question": question,
-        "customer_data": customer_data,
-        "context": context
-    }
+    response = f"""
+Customer Segment Analysis
 
+Top Segment:
+{top_segment['segment']}
 
-if __name__ == "__main__":
+Customers:
+{top_segment['customers']}
 
-    result = customer_agent(
-        "Which customer segment generates the most revenue?"
-    )
+Revenue:
+${top_segment['revenue']:,.2f}
 
-    print(result["customer_data"])
+This segment currently generates the highest revenue contribution.
+"""
 
-    print("\n")
-
-    print(result["context"])
+    return response

@@ -1,32 +1,42 @@
-from services.executive_service import (
-    generate_executive_summary
-)
+from services.executive_service import generate_executive_summary
+from vector_db.rag_pipeline import retrieve_context
 
-from vector_db.rag_pipeline import (
-    retrieve_context
-)
 
 def executive_agent(question):
 
     summary = generate_executive_summary()
 
-    context = retrieve_context(question)
+    finance = summary["finance"]
+    customers = summary["customers"]
+    products = summary["products"]
 
-    return {
-        "question": question,
-        "summary": summary,
-        "context": context
-    }
+    revenue = finance["total_revenue"].iloc[0]
+    profit = finance["total_profit"].iloc[0]
+    margin = finance["profit_margin"].iloc[0]
 
+    top_segment = customers.iloc[0]["segment"]
 
-if __name__ == "__main__":
+    top_product = products.iloc[0]["product_name"]
 
-    result = executive_agent(
-        "Give me an executive overview"
-    )
+    response = f"""
+Executive Summary
 
-    print(result["summary"])
+Revenue:
+${revenue:,.2f}
 
-    print("\n")
+Profit:
+${profit:,.2f}
 
-    print(result["context"])
+Profit Margin:
+{margin:.2f}%
+
+Top Customer Segment:
+{top_segment}
+
+Top Product:
+{top_product}
+
+Overall business performance remains positive with a healthy profit margin and strong contribution from the leading customer segment and product.
+"""
+
+    return response
