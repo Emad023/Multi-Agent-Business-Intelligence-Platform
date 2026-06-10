@@ -28,3 +28,24 @@ Enterprise-grade BI platform powered by Multi-Agent AI.
 - Qdrant
 - Streamlit
 - Plotly
+
+## Data Warehouse
+
+### Fact Table
+- sales_fact
+
+### Dimension Tables
+- dim_customer
+- dim_product
+- dim_region
+- dim_date
+
+### Row Counts
+
+| Table | Rows |
+|---------|---------|
+| Customer | 793 |
+| Product | 1894 |
+| Region | 632 |
+| Date | 1237 |
+| Sales | 9994 |
