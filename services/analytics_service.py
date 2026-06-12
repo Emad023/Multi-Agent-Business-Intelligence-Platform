@@ -1,34 +1,26 @@
 import pandas as pd
 from database.connection import engine
 
+def get_monthly_revenue():
 
-def run_sql_file(file_path):
+    query = """
+    SELECT
+        d.year,
+        d.month,
+        ROUND(SUM(f.sales)::numeric,2) AS revenue
 
-    with open(file_path, "r") as f:
-        query = f.read()
+    FROM sales_fact f
+
+    JOIN dim_date d
+        ON f.date_key = d.date_key
+
+    GROUP BY
+        d.year,
+        d.month
+
+    ORDER BY
+        d.year,
+        d.month
+    """
 
     return pd.read_sql(query, engine)
-
-
-def get_revenue_metrics():
-    return run_sql_file(
-        "analytics/revenue_analysis.sql"
-    )
-
-
-def get_customer_metrics():
-    return run_sql_file(
-        "analytics/customer_analysis.sql"
-    )
-
-
-def get_product_metrics():
-    return run_sql_file(
-        "analytics/product_analysis.sql"
-    )
-
-
-def get_profit_metrics():
-    return run_sql_file(
-        "analytics/profitability_analysis.sql"
-    )

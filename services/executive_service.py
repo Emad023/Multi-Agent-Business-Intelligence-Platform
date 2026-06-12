@@ -10,6 +10,7 @@ from services.product_service import (
     get_top_products
 )
 
+
 def generate_executive_summary():
 
     finance = get_financial_summary()

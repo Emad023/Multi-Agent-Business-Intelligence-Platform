@@ -1,3 +1,16 @@
+# Environment Variables
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data Files
 data/raw/*
 data/processed/*
 
@@ -5,7 +18,16 @@ data/processed/*
 *.xlsx
 *.parquet
 
-.env
+# Vector Database
+vector_db/qdrant_data/
 
-__pycache__/
-.ipynb_checkpoints/
+# Reports
+*.pdf
+
+# IDE
+.vscode/
+.idea/
+
+# OS Files
+.DS_Store
+Thumbs.db

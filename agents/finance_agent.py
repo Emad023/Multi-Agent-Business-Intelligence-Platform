@@ -1,33 +1,37 @@
-from services.finance_service import get_financial_summary
-from vector_db.rag_pipeline import retrieve_context
+from services.finance_service import (
+    get_financial_summary
+)
+
+from vector_db.rag_pipeline import (
+    retrieve_context
+)
+
+from llm.business_analyst import (
+    generate_business_answer
+)
 
 
 def finance_agent(question):
 
     finance = get_financial_summary()
 
-    revenue = finance["total_revenue"].iloc[0]
-    profit = finance["total_profit"].iloc[0]
-    margin = finance["profit_margin"].iloc[0]
+    context = retrieve_context(
+        question
+    )
 
-    context = retrieve_context(question)
+    data = {
+        "total_revenue": float(finance["total_revenue"].iloc[0]),
+        "total_profit": float(finance["total_profit"].iloc[0]),
+        "profit_margin": float(finance["profit_margin"].iloc[0])
+    }
 
-    response = f"""
-Financial Summary
+    answer = generate_business_answer(
+        question=question,
+        context=context,
+        data=data
+    )
 
-Revenue: ${revenue:,.2f}
-
-Profit: ${profit:,.2f}
-
-Profit Margin: {margin:.2f}%
-
-Business Context:
-Profit margin is calculated as Profit ÷ Revenue.
-
-The company generated strong revenue while maintaining a profit margin of {margin:.2f}%.
-"""
-
-    return response
+    return answer
 
 
 if __name__ == "__main__":

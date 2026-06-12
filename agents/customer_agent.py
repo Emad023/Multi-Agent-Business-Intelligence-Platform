@@ -1,3 +1,4 @@
+from llm.business_analyst import generate_business_answer
 from services.customer_service import get_customer_segments
 from vector_db.rag_pipeline import retrieve_context
 
@@ -6,23 +7,21 @@ def customer_agent(question):
 
     df = get_customer_segments()
 
-    top_segment = df.iloc[0]
-
     context = retrieve_context(question)
 
-    response = f"""
-Customer Segment Analysis
+    answer = generate_business_answer(
+        question=question,
+        context=context,
+        data=df.to_string()
+    )
 
-Top Segment:
-{top_segment['segment']}
+    return answer
 
-Customers:
-{top_segment['customers']}
 
-Revenue:
-${top_segment['revenue']:,.2f}
+if __name__ == "__main__":
 
-This segment currently generates the highest revenue contribution.
-"""
-
-    return response
+    print(
+        customer_agent(
+            "Which customer segment generates the most revenue?"
+        )
+    )
